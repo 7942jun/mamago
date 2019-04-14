@@ -5,11 +5,31 @@ from config import FLAGS
 
 class DataLoader:
     def __init__(self):
-        characters = 'SEPabcdefghijklmnopqrstuvwxyz단어나무놀이소녀키스사랑'
+        self.seq_data, characters = self.load_data(FLAGS.data_path)
         self.char_list = [c for c in characters]
-        self.seq_data = [['word', '단어'], ['wood', '나무'],
-                         ['game', '놀이'], ['girl', '소녀'],
-                         ['kiss', '키스'], ['love', '사랑']]
+
+    def load_data(self, data_path):
+        seq_data = []
+        characters = 'SEPabcdefghijklmnopqrstuvwxyz'
+
+        with open(data_path, 'r', encoding='utf-8') as data:
+            for word_set in data:
+                seq = []
+                word_en = word_set.split()[0]
+                word_ko = word_set.split()[1]
+
+                seq.append(word_en)
+                seq.append(word_ko)
+
+                characters = self.add_new_char(word_ko, characters)
+                seq_data.append(seq)
+        return seq_data, characters
+
+    def add_new_char(self, word, characters):
+        for char in word:
+            if char not in characters:
+                characters += char
+        return characters
 
     def make_batch(self, seq_data):
         input_batch = []

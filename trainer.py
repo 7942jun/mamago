@@ -40,6 +40,8 @@ def test():
     model = Seq2Seq()
     data_loader = DataLoader()
 
+    print(FLAGS.input_size)
+
     with tf.Session() as sess:
         checkpoint = tf.train.latest_checkpoint(FLAGS.train_dir)
         if checkpoint:
